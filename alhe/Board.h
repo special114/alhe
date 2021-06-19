@@ -8,6 +8,7 @@ private:
 	unsigned size;
 	unsigned** fields;
 public:
+	Board() {}
 	Board(unsigned size);
 	~Board();
 
