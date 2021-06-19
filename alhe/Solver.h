@@ -22,7 +22,11 @@ protected:
 public:
 	Solver(Board& _board);
 	void randomInitialization(Board& _board);
-
+	bool isSolution(Board& board);
+	bool isColumnUnique(Board& board, unsigned column);
+	bool isColumnConstraintApproved(Board& board, unsigned column);
+	bool isRowUnique(Board& board, unsigned row);
+	bool isRowConstraintApproved(Board& board, unsigned row);
 	std::vector<unsigned> split(const std::string& s, char deliliter);
 };
 

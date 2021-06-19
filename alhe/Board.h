@@ -12,7 +12,7 @@ public:
 	Board(unsigned size);
 	~Board();
 	unsigned getSize();
-	unsigned& getField(unsigned x, unsigned y);
+	unsigned& getField(unsigned column, unsigned row);
 
 	friend std::ostream& operator<<(std::ostream& os, const Board& board);
 };
