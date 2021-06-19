@@ -8,8 +8,13 @@ unsigned Solver::getSize()
 	return board.getSize();
 }
 
-Solver::Solver(Board& _board) : board(_board) {
-	init();
+
+Solver::Solver(Board& _board, std::vector<std::vector<unsigned>> constraints) : board(_board) {
+	//init();
+    top_constraints = constraints[0];
+    bot_constraints = constraints[1];
+    left_constraints = constraints[2];
+    right_constraints = constraints[3];
 }
 
 
@@ -35,10 +40,10 @@ void Solver::randomInitialization(Board& _board)
             numbers[i] = i + 1;
         }
 
-        std::random_device rd;
+        /*std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distrib(0, factorial(getSize()));
-        unsigned permutation = distrib(gen);
+        std::uniform_int_distribution<> distrib(0, factorial(getSize()));*/
+        unsigned permutation = std::rand() % factorial(getSize()) + 1;
         for (unsigned i = 0; i < permutation; ++i) {
             std::next_permutation(numbers, numbers + getSize());
         }
@@ -53,13 +58,13 @@ void Solver::randomInitialization(Board& _board)
 
 bool Solver::isSolution(Board& board)
 {
-    for (int column = 0; column < getSize(); ++column) {
-        if (!isColumnUnique(board, column) || !isColumnConstraintApproved(board, column)) {
+    for (unsigned column = 0; column < getSize(); ++column) {
+        if (!isColumnUnique(board, column) || checkColumnConstraint(board, column)) {
             return false;
         }
 
-        for (int row = 0; row < getSize(); ++row) {
-            if (!isRowUnique(board, row) || !isRowConstraintApproved(board, column)) {
+        for (unsigned row = 0; row < getSize(); ++row) {
+            if (!isRowUnique(board, row) || checkRowConstraint(board, column)) {
                 return false;
             }
         }
@@ -87,10 +92,11 @@ bool Solver::isColumnUnique(Board& board, unsigned column)
     return true;
 }
 
-bool Solver::isColumnConstraintApproved(Board& board, unsigned column)
+int Solver::checkColumnConstraint(Board& board, unsigned column)
 {
     unsigned seenPyramids = 0;
     unsigned highestPyramid = 0;
+    unsigned brokenConstraints = 0;
 
     if (top_constraints[column] != 0) {
         for (unsigned row = 0; row < getSize(); ++row) {
@@ -103,14 +109,14 @@ bool Solver::isColumnConstraintApproved(Board& board, unsigned column)
         }
 
         if (seenPyramids != top_constraints[column]) {
-            return false;
+            ++brokenConstraints;
         }
     }
 
     if (bot_constraints[column] != 0) {
         seenPyramids = 0;
         highestPyramid = 0;
-        for (unsigned row = getSize() - 1; row >= 0; --row) {
+        for (unsigned row = getSize() - 1; row > 0; --row) {
             unsigned currentPyramid = board.getField(column, row);
 
             if (currentPyramid > highestPyramid) {
@@ -120,11 +126,11 @@ bool Solver::isColumnConstraintApproved(Board& board, unsigned column)
         }
 
         if (seenPyramids != bot_constraints[column]) {
-            return false;
+            ++brokenConstraints;
         }
     }
 
-    return true;
+    return brokenConstraints;;
 }
 
 bool Solver::isRowUnique(Board& board, unsigned row)
@@ -144,10 +150,11 @@ bool Solver::isRowUnique(Board& board, unsigned row)
     return true;
 }
 
-bool Solver::isRowConstraintApproved(Board& board, unsigned row)
+int Solver::checkRowConstraint(Board& board, unsigned row)
 {
     unsigned seenPyramids = 0;
     unsigned highestPyramid = 0;
+    unsigned brokenConstraints = 0;
 
     if (left_constraints[row] != 0) {
         for (unsigned column = 0; column < getSize(); ++column) {
@@ -160,14 +167,14 @@ bool Solver::isRowConstraintApproved(Board& board, unsigned row)
         }
 
         if (seenPyramids != left_constraints[row]) {
-            return false;
+            ++brokenConstraints;
         }
     }
 
     if (right_constraints[row] != 0) {
         seenPyramids = 0;
         highestPyramid = 0;
-        for (unsigned column = getSize() - 1; column >= 0; --column) {
+        for (unsigned column = getSize() - 1; column > 0; --column) {
             unsigned currentPyramid = board.getField(column, row);
 
             if (currentPyramid > highestPyramid) {
@@ -177,11 +184,18 @@ bool Solver::isRowConstraintApproved(Board& board, unsigned row)
         }
 
         if (seenPyramids != right_constraints[row]) {
-            return false;
+            ++brokenConstraints;
         }
     }
 
-    return true;
+    return brokenConstraints;
+}
+
+void Solver::copyValues(unsigned* toTable, unsigned* fromTable)
+{
+    for (unsigned i = 0; i < getSize(); ++i) {
+        toTable[i] = fromTable[i];
+    }
 }
 
 unsigned Solver::factorial(unsigned n)

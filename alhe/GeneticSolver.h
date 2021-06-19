@@ -38,7 +38,7 @@ private:
 
 	Board* genetareBoard();
 public:
-	GeneticSolver(Board& _board, unsigned _population_size);
+	GeneticSolver(Board& _board, unsigned _population_size, std::vector<std::vector<unsigned>> constraints);
 	~GeneticSolver();
 	bool solve();
 	void assessPopulation(Individual** population, bool isChildren);

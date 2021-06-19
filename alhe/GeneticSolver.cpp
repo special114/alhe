@@ -3,7 +3,7 @@
 
 using namespace std;
 
-GeneticSolver::GeneticSolver(Board& _board, unsigned _population_size) : Solver(_board) {
+GeneticSolver::GeneticSolver(Board& _board, unsigned _population_size, vector<vector<unsigned>> constraints) : Solver(_board, constraints) {
 	this->population_size = _population_size;
 	this->population = new Individual* [_population_size];
 	for (int i = 0; i < _population_size; ++i) {
