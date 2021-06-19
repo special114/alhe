@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Board.h"
+#include "Solver.h"
 
 using namespace std;
 
@@ -17,9 +18,7 @@ int main()
 	cout << "Podaj wskazowki:\n";
 	cin.ignore();
 
-	string line;
-	getline(cin, line);
-	cout << line << endl;
+	Solver s(b);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
