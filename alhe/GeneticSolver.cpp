@@ -2,7 +2,7 @@
 
 using namespace std;
 
-GeneticSolver::GeneticSolver(Board& _board, unsigned _population_size) : Solver(_board) {
+GeneticSolver::GeneticSolver(Board& _board, unsigned _population_size, vector<vector<unsigned>> constraints) : Solver(_board, constraints) {
 	this->population_size = _population_size;
 	this->population = new Board*[_population_size];
 
@@ -30,7 +30,7 @@ void GeneticSolver::solve() {
 
 int GeneticSolver::assessPopulation() {
 	int sum = 0;
-	
+	return 0;
 }
 
 void GeneticSolver::performCrossover(Board* b1, Board* b2) {

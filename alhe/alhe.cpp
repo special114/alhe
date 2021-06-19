@@ -1,35 +1,53 @@
-﻿// alhe.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <string>
-
+﻿#include <string>
+#include <fstream>
 #include "Board.h"
 #include "Solver.h"
+#include "TabuSolver.h"
 #include "GeneticSolver.h"
 
 using namespace std;
 
-int main()
-{
-	unsigned n;
-	cout << "Podaj rozmiar planszy: ";
-	cin >> n;
-	Board b(n);
-	cout << b;
-	cout << "Podaj wskazowki:\n";
-	cin.ignore();
+void readInputFile(unsigned& n, vector<vector<unsigned>>& constraints) {
+	fstream file;
+	file.open("input.txt", std::fstream::in);
+	if (!file.is_open()) {
+		cout << "Brak pliku input.txt";
+		return;
+	}
 
-	GeneticSolver g(b, 10);
-	g.print();
+	char buffer[10];
+	file.getline(buffer, 9);
+	n = atoi(buffer);
+	for (int i = 0; i < n; ++i) {
+		vector<unsigned> vec;
+		for (int j = 0; j < n - 1; ++j) {
+			file.getline(buffer, 9, ' ');
+			vec.push_back(atoi(buffer));
+		}
+		file.getline(buffer, 9);
+		vec.push_back(atoi(buffer));
+		constraints.push_back(vec);
+	}
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+int main( int argc, char* argv[] )
+{
+	if (argc == 1) {
+		cout << "Podaj seed jako argument";
+		return 0;
+	}
+	std::srand( atoi(argv[1]) );
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	unsigned n;
+	vector<vector<unsigned>> constraints;
+	readInputFile(n, constraints);
+
+	Board b(n);
+	TabuSolver s(b, constraints);
+
+	s.execute();
+
+	cout << "Udalo sie! \n";
+	cout << b ;
+	return 0;
+}

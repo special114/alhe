@@ -8,7 +8,7 @@
 
 class Solver
 {
-protected:
+public:
 	Board& board;
 	std::vector<unsigned> top_constraints;
 	std::vector<unsigned> bot_constraints;
@@ -20,13 +20,14 @@ protected:
 	void init();
 	void initConstraints(std::vector<unsigned>& constraints);
 public:
-	Solver(Board& _board);
+	Solver(Board& _board, std::vector<std::vector<unsigned>> constraints);
 	void randomInitialization(Board& _board);
 	bool isSolution(Board& board);
 	bool isColumnUnique(Board& board, unsigned column);
-	bool isColumnConstraintApproved(Board& board, unsigned column);
 	bool isRowUnique(Board& board, unsigned row);
-	bool isRowConstraintApproved(Board& board, unsigned row);
+	int checkColumnConstraint(Board& board, unsigned column);
+	int checkRowConstraint(Board& board, unsigned row);
+	void copyValues(unsigned* toTable, unsigned* fromTable);
 	std::vector<unsigned> split(const std::string& s, char deliliter);
 };
 
