@@ -145,11 +145,13 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="GeneticSolver.cpp" />
     <ClCompile Include="Solver.cpp" />
+    <ClCompile Include="TabuSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="GeneticSolver.h" />
     <ClInclude Include="Solver.h" />
+    <ClInclude Include="TabuSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
