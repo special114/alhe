@@ -4,8 +4,6 @@ class TabuSolver : public Solver
 {
 public:
 	TabuSolver(Board& _board);
-private:
-	void randomInitialization();
-
+public:
 };
 
