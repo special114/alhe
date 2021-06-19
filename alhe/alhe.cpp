@@ -17,8 +17,7 @@ void readInputFile(unsigned& n, vector<vector<unsigned>>& constraints) {
 
 	char buffer[10];
 	file.getline(buffer, 9);
-	unsigned n = atoi(buffer);
-	vector<vector<unsigned>> constraints;
+	n = atoi(buffer);
 	for (int i = 0; i < n; ++i) {
 		vector<unsigned> vec;
 		for (int j = 0; j < n - 1; ++j) {
