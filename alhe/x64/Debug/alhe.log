@@ -1,6 +1,2 @@
-﻿  Board.cpp
-C:\Users\Rafał\source\repos\alhe\alhe\Board.cpp(8,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Rafał\source\repos\alhe\alhe\Board.cpp(14,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Rafał\source\repos\alhe\alhe\Board.cpp(21,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Rafał\source\repos\alhe\alhe\Board.cpp(22,21): warning C4018: '<': signed/unsigned mismatch
+﻿  alhe.cpp
   alhe.vcxproj -> C:\Users\Rafał\source\repos\alhe\x64\Debug\alhe.exe

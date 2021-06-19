@@ -1,7 +1,8 @@
 ﻿// alhe.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
+#include <string>
+
 #include "Board.h"
 
 using namespace std;
@@ -13,6 +14,12 @@ int main()
 	cin >> n;
 	Board b(n);
 	cout << b;
+	cout << "Podaj wskazowki:\n";
+	cin.ignore();
+
+	string line;
+	getline(cin, line);
+	cout << line << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
