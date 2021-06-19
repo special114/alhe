@@ -20,7 +20,7 @@ public:
 	void init();
 	void initConstraints(std::vector<unsigned>& constraints);
 public:
-	Solver(Board& _board);
+	Solver(Board& _board, std::vector<std::vector<unsigned>> constraints);
 	void randomInitialization(Board& _board);
 	bool isSolution(Board& board);
 	bool isColumnUnique(Board& board, unsigned column);

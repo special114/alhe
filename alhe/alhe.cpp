@@ -1,5 +1,5 @@
 ﻿#include <string>
-
+#include <fstream>
 #include "Board.h"
 #include "Solver.h"
 #include "TabuSolver.h"
@@ -7,64 +7,48 @@
 
 using namespace std;
 
-int main()
-{
-	//std::srand(3123);
-
-	unsigned n;
-	cout << "Podaj rozmiar planszy: ";
-	cin >> n;
-	cin.ignore();
-	Board b(n);
-	TabuSolver s(b);
-
-	s.top_constraints.push_back(0);
-	s.top_constraints.push_back(2);
-	s.top_constraints.push_back(5);
-	s.top_constraints.push_back(0);
-	s.top_constraints.push_back(0);
-		//s.top_constraints.push_back(0);
-		//s.top_constraints.push_back(0);
-	s.left_constraints.push_back(2);
-	s.left_constraints.push_back(0);
-	s.left_constraints.push_back(0);
-	s.left_constraints.push_back(0);
-	s.left_constraints.push_back(3);
-		//s.left_constraints.push_back(0);
-		//s.left_constraints.push_back(0);
-	//s.right_constraints.push_back(0);
-	//s.right_constraints.push_back(0);
-	//s.right_constraints.push_back(0);
-	//s.right_constraints.push_back(0);
-	//s.right_constraints.push_back(0);
-	//s.bot_constraints.push_back(0);
-	//s.bot_constraints.push_back(0);
-	//s.bot_constraints.push_back(0);
-	//s.bot_constraints.push_back(0);
-	//s.bot_constraints.push_back(0);
-
-	for (int i = 0; i < 5; ++i) {
-		//s.top_constraints.push_back(0);
-		s.bot_constraints.push_back(0);
-		//s.left_constraints.push_back(0);
-		s.right_constraints.push_back(0);
+void readInputFile(unsigned& n, vector<vector<unsigned>>& constraints) {
+	fstream file;
+	file.open("input.txt", std::fstream::in);
+	if (!file.is_open()) {
+		cout << "Brak pliku input.txt";
+		return;
 	}
 
+	char buffer[10];
+	file.getline(buffer, 9);
+	unsigned n = atoi(buffer);
+	vector<vector<unsigned>> constraints;
+	for (int i = 0; i < n; ++i) {
+		vector<unsigned> vec;
+		for (int j = 0; j < n - 1; ++j) {
+			file.getline(buffer, 9, ' ');
+			vec.push_back(atoi(buffer));
+		}
+		file.getline(buffer, 9);
+		vec.push_back(atoi(buffer));
+		constraints.push_back(vec);
+	}
+}
+
+int main( int argc, char* argv[] )
+{
+	if (argc == 1) {
+		cout << "Podaj seed jako argument";
+		return 0;
+	}
+	std::srand( atoi(argv[1]) );
+
+	unsigned n;
+	vector<vector<unsigned>> constraints;
+	readInputFile(n, constraints);
+
+	Board b(n);
+	TabuSolver s(b, constraints);
 
 	s.execute();
 
-	cout << "we did it! \n";
-
-	//b.getField(0, 0) = 1;
-	//b.getField(0, 1) = 2;
-	//b.getField(0, 2) = 3;
-	//b.getField(1, 0) = 2;
-	//b.getField(1, 1) = 3;
-	//b.getField(1, 2) = 1;
-	//b.getField(2, 0) = 3;
-	//b.getField(2, 1) = 1;
-	//b.getField(2, 2) = 2;
-
+	cout << "Udalo sie! \n";
 	cout << b ;
-	//cout << s.isSolution(b);
+	return 0;
 }

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-TabuSolver::TabuSolver(Board& _board) : Solver(_board) {
+TabuSolver::TabuSolver(Board& _board, vector<vector<unsigned>> constraints) : Solver(_board, constraints) {
 
 	for (unsigned i = 0; i < getSize(); ++i) {
 		rowParams.push_back(Row(0));
@@ -44,6 +44,7 @@ void TabuSolver::calculateRowsLossFunction()
 
 void TabuSolver::iterateThroughNeighboursInRow(unsigned row)
 {
+	const int LOWEST_VALUE = -2147483648;
 	int maxDiff = -LOWEST_VALUE;
 	rowParams[row].fieldsToSwap.clear();
 	for (unsigned column = 0; column < getSize(); ++column) {
@@ -90,10 +91,13 @@ unsigned TabuSolver::fieldLossFunction(unsigned column, unsigned row)
 
 int TabuSolver::lossFunctionDiffAfterSwap(unsigned column, unsigned row, unsigned neighbour)
 {
+	const int LOWEST_VALUE = -2147483648;
 	unsigned currLossValue = rowParams[row].lossFunction;
 	std::swap(board.getField(column, row), board.getField(neighbour, row));
-	if (checkIfInTabu(row))
+	if (checkIfInTabu(row)) {
 		return LOWEST_VALUE;
+	}
+
 	unsigned lossValueAfterSwap = calculateRowLossFunction(row);
 	std::swap(board.getField(column, row), board.getField(neighbour, row));
 	int diff = currLossValue - lossValueAfterSwap;
@@ -148,12 +152,13 @@ void TabuSolver::makeBestSwap(unsigned row)
 	if (rowParams[row].fieldsToSwap.size() == 0)
 		return;
 
-	int lastElemIdx = (int)rowParams[row].fieldsToSwap.size() - 1;
+	/*int lastElemIdx = (int)rowParams[row].fieldsToSwap.size() - 1;
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distrib(0, lastElemIdx);
+	std::uniform_int_distribution<> distrib(0, lastElemIdx);*/
+	int randomSwap = std::rand() % rowParams[row].fieldsToSwap.size();
 
-	auto fieldsToSwap = rowParams[row].fieldsToSwap[distrib(gen)];
+	auto fieldsToSwap = rowParams[row].fieldsToSwap[randomSwap];
 
 	std::swap(board.getField(fieldsToSwap.first, row), board.getField(fieldsToSwap.second, row));
 

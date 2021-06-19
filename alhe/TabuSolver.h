@@ -14,7 +14,7 @@ struct Row {
 class TabuSolver : public Solver
 {
 public:
-	TabuSolver(Board& _board);
+	TabuSolver(Board& _board, std::vector<std::vector<unsigned>> constraints);
 	void execute();
 
 private:
@@ -31,9 +31,7 @@ private:
 	void makeBestSwap(unsigned row);
 
 	std::vector<Row> rowParams;
-	const int LOWEST_VALUE = -2147483648;
 	const int TABU_LENGTH = 4;
 	const int LOOP_RESET = 10000;
-	//std::vector<unsigned> 
 };
 

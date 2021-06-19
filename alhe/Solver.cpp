@@ -8,8 +8,12 @@ unsigned Solver::getSize()
 	return board.getSize();
 }
 
-Solver::Solver(Board& _board) : board(_board) {
+Solver::Solver(Board& _board, std::vector<std::vector<unsigned>> constraints) : board(_board) {
 	//init();
+    top_constraints = constraints[0];
+    bot_constraints = constraints[1];
+    left_constraints = constraints[2];
+    right_constraints = constraints[3];
 }
 
 
@@ -35,10 +39,10 @@ void Solver::randomInitialization(Board& _board)
             numbers[i] = i + 1;
         }
 
-        std::random_device rd;
+        /*std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distrib(0, factorial(getSize()));
-        unsigned permutation = distrib(gen);
+        std::uniform_int_distribution<> distrib(0, factorial(getSize()));*/
+        unsigned permutation = std::rand() % factorial(getSize()) + 1;
         for (unsigned i = 0; i < permutation; ++i) {
             std::next_permutation(numbers, numbers + getSize());
         }
