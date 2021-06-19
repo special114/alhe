@@ -1,4 +1,4 @@
-/*
+
 #include "GeneticSolver.h"
 
 using namespace std;
@@ -22,30 +22,7 @@ GeneticSolver::~GeneticSolver() {
 	delete[] population;
 	delete[] population_scores;
 }
-*/
-#include "GeneticSolver.h"
 
-using namespace std;
-
-GeneticSolver::GeneticSolver(Board& _board, unsigned _population_size) : Solver(_board) {
-	this->population_size = _population_size;
-	this->population = new Individual[_population_size];
-	this->children = new Individual[_population_size];
-	this->population_scores = new double[_population_size];
-	this->probability = new Range[_population_size];
-
-	for (int i = 0; i < population_size; ++i) {
-		population[i].board = genetareBoard();
-	}
-}
-
-GeneticSolver::~GeneticSolver() {
-	for (int i = 0; i < population_size; ++i) {
-		delete population[i].board;
-	}
-	delete[] population;
-	delete[] population_scores;
-}
 
 Board* GeneticSolver::genetareBoard() {
 	Board* b = new Board(board.getSize());
@@ -57,17 +34,19 @@ bool GeneticSolver::solve() {
 	int i = 0;
 	while (!solutionFound) {
 		cout << i << endl;
-		assessPopulation();
+		assessPopulation(population, false);
 		performSelection();
 		print();
 		performCrossover();
+		performMutation();
+		assessPopulation(children, true);
 		performSuccession();	
 		++i;
 	}
 	return true;
 }
 
-void GeneticSolver::assessPopulation() {
+void GeneticSolver::assessPopulation(Individual** population, bool isChildren) {
 	for (int i = 0; i < population_size; ++i) {
 		if (solutionFound) {
 			return;
@@ -75,44 +54,46 @@ void GeneticSolver::assessPopulation() {
 		assess(population[i]);
 	}
 	sort(population, population + population_size, GeneticSolver::comp);
+	
+	if (!isChildren) {
+		for (int i = 0; i < population_size; ++i) {
+			population_scores[i] = population[i]->score;
+		}
 
-	for (int i = 0; i < population_size; ++i) {
-		population_scores[i] = population[i].score;
-	}
-
-	double qmin = population_scores[0];
-	double qmax = population_scores[population_size - 1];
-	if (qmax != qmin) {
-		for (unsigned i = 0; i < population_size; ++i) {
-			population_scores[i] = 1 - ((population_scores[i] - qmin) / (qmax - qmin));
+		double qmin = population_scores[0];
+		double qmax = population_scores[population_size - 1];
+		if (qmax != qmin) {
+			for (unsigned i = 0; i < population_size; ++i) {
+				population_scores[i] = 1 - ((population_scores[i] - qmin) / (qmax - qmin));
+			}
 		}
 	}
 }
 
-void GeneticSolver::assess(Individual& individual) {
-	unsigned size = individual.board->getSize();
+void GeneticSolver::assess(Individual* individual) {
+	unsigned size = individual->board->getSize();
 	unsigned score = 0;
 
 	for (unsigned i = 0; i < size; ++i) {
-		if (!isRowUnique(*(individual.board), i)) {
+		if (!isRowUnique(*(individual->board), i)) {
 			++score;
 		}
-		if (!isColumnUnique(*(individual.board), i)) {
+		if (!isColumnUnique(*(individual->board), i)) {
 			++score;
 		}
-		if (!isRowConstraintApproved(*(individual.board), i)) {
+		if (!isRowConstraintApproved(*(individual->board), i)) {
 			score += size / 2;
 		}
-		if (!isColumnConstraintApproved(*(individual.board), i)) {
+		if (!isColumnConstraintApproved(*(individual->board), i)) {
 			score += size / 2;
 		}
 	}
 	if (score == 0) {
-		board.copyValues(*(individual.board));
+		board.copyValues(*(individual->board));
 		solutionFound = true;
 		return;
 	}
-	individual.score = (double) score;
+	individual->score = (double) score;
 }
 
 void GeneticSolver::performSelection() {
@@ -142,16 +123,12 @@ unsigned GeneticSolver::getMaxScore() {
 }
 
 void GeneticSolver::performCrossover() {
-	Individual parent1;
-	Individual parent2;
+	Individual* parent1 = nullptr;
+	Individual* parent2 = nullptr;
 
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<> dis(0.0, 1.0);
-
-	for (unsigned i = 0; i < population_size / 2; ++i) {
-		double rand1 = dis(gen);
-		double rand2 = dis(gen);
+	for (unsigned i = 0; i < population_size; ++i) {
+		double rand1 = rand() / RAND_MAX;
+		double rand2 = rand() / RAND_MAX;
 
 		for (unsigned j = 0; j < population_size; ++j) {
 			if (rand1 >= probability[j].start && rand1 < probability[j].end) {
@@ -167,39 +144,45 @@ void GeneticSolver::performCrossover() {
 			}
 		}
 
-		
-		if (children[2 * i].board != nullptr) {
-			delete children[2 * i].board;
-		}
-		if (children[2 * i].board != nullptr) {
-			delete children[2 * i + 1].board;
-		}
+		children[i] = createChild(parent1, parent2);
+	}
+}
 
-		children[2 * i] = createChild(parent1, parent2);
-		children[2 * i + 1] = createChild(parent1, parent2);
+void GeneticSolver::performMutation() {
+	unsigned board_size = board.getSize();
+	for (unsigned i = 0; i < population_size; ++i) {
+		for (unsigned j = 0; j < board_size; ++j) {
+			for (unsigned k = 0; k < board_size; ++k) {
+				if (((double)rand() / RAND_MAX) > MUTATION) {
+					children[i]->board->getField(j, k) = rand() % board_size + 1;
+				}
+			}
+		}
 	}
 }
 
 void GeneticSolver::performSuccession() {
-	for (unsigned i = 0; i < population_size; ++i) {
-		delete population[i].board;
+	if (population[0]->score > children[0]->score) {
+		delete population[0];
+		population[0] = children[0];
+	}
+	for (unsigned i = 1; i < population_size; ++i) {
+		delete population[i];
 		population[i] = children[i];
 	}
 }
 
-Individual GeneticSolver::createChild(Individual& parent1, Individual& parent2) {
-	unsigned size = parent1.board->getSize();
-	Board* b = new Board(size);
-	Individual child;
-	child.board = b;
+Individual* GeneticSolver::createChild(Individual* parent1, Individual* parent2) {
+	unsigned size = parent1->board->getSize();
+	Individual* child = new Individual(size);
 
 	for (unsigned i = 0; i < size; ++i) {
 		for (unsigned j = 0; j < size / 2; ++j) {
-			child.board->getField(i, j) = parent1.board->getField(i, j);
+			child->board->getField(i, j) = parent1->board->getField(i, j);
 		}
 
 		for (unsigned j = size / 2; j < size; ++j) {
-			child.board->getField(i, j) = parent2.board->getField(i, j);
+			child->board->getField(i, j) = parent2->board->getField(i, j);
 		}
 	}
 
@@ -208,12 +191,12 @@ Individual GeneticSolver::createChild(Individual& parent1, Individual& parent2) 
 
 void GeneticSolver::print() {
 	for (int i = 0; i < population_size; ++i) {
-		cout << i << endl << *(population[i].board) << endl
-			<< "score: " << population_scores[i] << endl 
+		cout << i << endl << *(population[i]->board) << endl
+			<< "score: " << population[i]->score << endl
 			<< "chances: " << probability[i].start << " " << probability[i].end << endl << endl;
 	}
 }
 
-bool GeneticSolver::comp(Individual& in1, Individual& in2) {
-	return in1.score < in2.score;
+bool GeneticSolver::comp(Individual* in1, Individual* in2) {
+	return in1->score < in2->score;
 }

@@ -6,9 +6,20 @@
 
 #include "Solver.h"
 
-struct Individual {
-	Board* board = nullptr;
+const int MUTATION = 0.5;
+
+class Individual {
+public:
+	Board* board;
 	double score;
+
+	Individual(int size) {
+		board = new Board(size);
+	}
+
+	~Individual() {
+		delete board;
+	}
 };
 struct Range {
 	double start;
@@ -19,8 +30,8 @@ class GeneticSolver : public Solver
 {
 private:
 	unsigned population_size;
-	Individual* population;
-	Individual* children;
+	Individual** population;
+	Individual** children;
 	double* population_scores;
 	Range* probability;
 	bool solutionFound = false;
@@ -30,15 +41,15 @@ public:
 	GeneticSolver(Board& _board, unsigned _population_size);
 	~GeneticSolver();
 	bool solve();
-	void assessPopulation();
-	void assess(Individual& in);
+	void assessPopulation(Individual** population, bool isChildren);
+	void assess(Individual* in);
 	void performSelection();
 	unsigned getMaxScore();
 	void performCrossover();
-	void permormMutation();
+	void performMutation();
 	void performSuccession();
-	Individual createChild(Individual& in1, Individual& in2);
-	static bool comp(Individual& in1, Individual& in2);
+	Individual* createChild(Individual* in1, Individual* in2);
+	static bool comp(Individual* in1, Individual* in2);
 	void print();
 };
 

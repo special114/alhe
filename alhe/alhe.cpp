@@ -11,6 +11,7 @@ using namespace std;
 
 int main()
 {
+	srand(time(NULL));
 	unsigned n;
 	cout << "Podaj rozmiar planszy: ";
 	cin >> n;
