@@ -1,35 +1,70 @@
-﻿// alhe.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <string>
+﻿#include <string>
 
 #include "Board.h"
 #include "Solver.h"
+#include "TabuSolver.h"
 #include "GeneticSolver.h"
 
 using namespace std;
 
 int main()
 {
+	//std::srand(3123);
+
 	unsigned n;
 	cout << "Podaj rozmiar planszy: ";
 	cin >> n;
-	Board b(n);
-	cout << b;
-	cout << "Podaj wskazowki:\n";
 	cin.ignore();
+	Board b(n);
+	TabuSolver s(b);
 
-	GeneticSolver g(b, 10);
-	g.print();
+	s.top_constraints.push_back(0);
+	s.top_constraints.push_back(2);
+	s.top_constraints.push_back(5);
+	s.top_constraints.push_back(0);
+	s.top_constraints.push_back(0);
+		//s.top_constraints.push_back(0);
+		//s.top_constraints.push_back(0);
+	s.left_constraints.push_back(2);
+	s.left_constraints.push_back(0);
+	s.left_constraints.push_back(0);
+	s.left_constraints.push_back(0);
+	s.left_constraints.push_back(3);
+		//s.left_constraints.push_back(0);
+		//s.left_constraints.push_back(0);
+	//s.right_constraints.push_back(0);
+	//s.right_constraints.push_back(0);
+	//s.right_constraints.push_back(0);
+	//s.right_constraints.push_back(0);
+	//s.right_constraints.push_back(0);
+	//s.bot_constraints.push_back(0);
+	//s.bot_constraints.push_back(0);
+	//s.bot_constraints.push_back(0);
+	//s.bot_constraints.push_back(0);
+	//s.bot_constraints.push_back(0);
+
+	for (int i = 0; i < 5; ++i) {
+		//s.top_constraints.push_back(0);
+		s.bot_constraints.push_back(0);
+		//s.left_constraints.push_back(0);
+		s.right_constraints.push_back(0);
+	}
+
+
+	s.execute();
+
+	cout << "we did it! \n";
+
+	//b.getField(0, 0) = 1;
+	//b.getField(0, 1) = 2;
+	//b.getField(0, 2) = 3;
+	//b.getField(1, 0) = 2;
+	//b.getField(1, 1) = 3;
+	//b.getField(1, 2) = 1;
+	//b.getField(2, 0) = 3;
+	//b.getField(2, 1) = 1;
+	//b.getField(2, 2) = 2;
+
+	cout << b ;
+	//cout << s.isSolution(b);
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

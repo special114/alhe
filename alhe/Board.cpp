@@ -27,6 +27,11 @@ unsigned& Board::getField(unsigned column, unsigned row)
 	return fields[row][column];
 }
 
+unsigned* Board::getRow(unsigned row)
+{
+	return fields[row];
+}
+
 ostream& operator<<(ostream& os, const Board& board) {
 	for (int i = 0; i < board.size; ++i) {
 		for (int j = 0; j < board.size; ++j) {

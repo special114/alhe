@@ -30,7 +30,7 @@ void GeneticSolver::solve() {
 
 int GeneticSolver::assessPopulation() {
 	int sum = 0;
-	
+	return 0;
 }
 
 void GeneticSolver::performCrossover(Board* b1, Board* b2) {
