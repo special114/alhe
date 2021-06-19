@@ -9,7 +9,7 @@ unsigned Solver::getSize()
 }
 
 Solver::Solver(Board& _board) : board(_board) {
-	init();
+	//init();
 }
 
 
@@ -26,7 +26,7 @@ void Solver::initConstraints(vector<unsigned>& constraints) {
 	constraints = split(line, ' ');
 }
 
-void Solver::randomInitialization()
+void Solver::randomInitialization(Board& _board)
 {
     unsigned* numbers = new unsigned[getSize()];
 
@@ -44,7 +44,7 @@ void Solver::randomInitialization()
         }
 
         for (unsigned column = 0; column < getSize(); ++column) {
-            board.getField(column, row) = numbers[column];
+            _board.getField(column, row) = numbers[column];
         }
     }
 

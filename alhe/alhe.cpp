@@ -5,6 +5,7 @@
 
 #include "Board.h"
 #include "Solver.h"
+#include "GeneticSolver.h"
 
 using namespace std;
 
@@ -18,7 +19,8 @@ int main()
 	cout << "Podaj wskazowki:\n";
 	cin.ignore();
 
-	Solver s(b);
+	GeneticSolver g(b, 10);
+	g.print();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

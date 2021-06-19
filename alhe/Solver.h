@@ -21,8 +21,8 @@ protected:
 	void initConstraints(std::vector<unsigned>& constraints);
 public:
 	Solver(Board& _board);
-	void randomInitialization();
-	//bool isValidPosition(unsigned height, unsigned x, unsigned y);
+	void randomInitialization(Board& _board);
+
 	std::vector<unsigned> split(const std::string& s, char deliliter);
 };
 
