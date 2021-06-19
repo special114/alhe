@@ -20,7 +20,9 @@ int main()
 	cin.ignore();
 
 	GeneticSolver g(b, 10);
-	g.print();
+	if (g.solve()) {
+		cout << "solved" << endl << b;
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

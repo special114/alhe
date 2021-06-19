@@ -9,7 +9,7 @@ unsigned Solver::getSize()
 }
 
 Solver::Solver(Board& _board) : board(_board) {
-	//init();
+	init();
 }
 
 
