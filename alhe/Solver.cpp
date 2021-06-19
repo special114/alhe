@@ -2,6 +2,11 @@
 
 using namespace std;
 
+unsigned Solver::getSize()
+{
+	return board.getSize();
+}
+
 Solver::Solver(Board& _board) : board(_board) {}
 
 void Solver::init() {
@@ -16,7 +21,7 @@ void Solver::init() {
 //	//istringstream tokenStream(s);
 //}
 
-bool Solver::isValidPosition(unsigned height, unsigned x, unsigned y) {
-	return true;
-}
-
+//bool Solver::isValidPosition(unsigned height, unsigned x, unsigned y) {
+//	if( top_constraints[x] )
+//	return true;
+//}

@@ -11,6 +11,7 @@ public:
 	Board() {}
 	Board(unsigned size);
 	~Board();
+	unsigned getSize();
 
 	friend std::ostream& operator<<(std::ostream& os, const Board& board);
 };
