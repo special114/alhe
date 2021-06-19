@@ -16,11 +16,11 @@ protected:
 	std::vector<unsigned> right_constraints;
 
 	unsigned getSize();
+	void init();
+	void initConstraints(std::vector<unsigned>& constraints);
 public:
 	Solver(Board& _board);
-	void init();
 	//bool isValidPosition(unsigned height, unsigned x, unsigned y);
-	void initConstraints(std::vector<unsigned>& constraints);
 	std::vector<unsigned> split(const std::string& s, char deliliter);
 };
 
