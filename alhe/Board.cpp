@@ -10,6 +10,20 @@ Board::Board(unsigned size) {
 	}
 }
 
+void Board::copyValues(Board& _board) {
+	this->size = _board.getSize();
+	this->fields = new unsigned* [size];
+	for (unsigned i = 0; i < size; ++i) {
+		this->fields[i] = new unsigned[size]();
+	}
+
+	for (unsigned i = 0; i < size; ++i) {
+		for (unsigned j = 0; j < size; ++j) {
+			this->fields[i][j] = _board.getField(i, j);
+		}
+	}
+}
+
 Board::~Board() {
 	for (int i = 0; i < size; ++i) {
 		delete[] fields[i];

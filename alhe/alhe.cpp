@@ -43,7 +43,15 @@ int main( int argc, char* argv[] )
 	readInputFile(n, constraints);
 
 	Board b(n);
-	TabuSolver s(b, constraints);
+  
+	GeneticSolver g(b, 10, constraints);
+	if (g.solve()) {
+		cout << "solved" << endl << b;
+	}
+
+  Board b2(n)
+	TabuSolver s(b2, constraints);
+
 
 	s.execute();
 

@@ -35,3 +35,5 @@
 *.exe
 *.out
 *.app
+/alhe/x64/Debug/alhe.tlog
+/alhe/x64/Debug

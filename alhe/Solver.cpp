@@ -8,6 +8,7 @@ unsigned Solver::getSize()
 	return board.getSize();
 }
 
+
 Solver::Solver(Board& _board, std::vector<std::vector<unsigned>> constraints) : board(_board) {
 	//init();
     top_constraints = constraints[0];

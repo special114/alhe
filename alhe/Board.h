@@ -10,6 +10,7 @@ private:
 public:
 	Board() {}
 	Board(unsigned size);
+	void copyValues(Board& board);
 	~Board();
 	unsigned getSize();
 	unsigned& getField(unsigned column, unsigned row);
