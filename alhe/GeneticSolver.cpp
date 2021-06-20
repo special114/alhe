@@ -36,7 +36,7 @@ bool GeneticSolver::solve() {
 		cout << i << endl;
 		assessPopulation(population, false);
 		performSelection();
-		print();
+		//print();
 		performCrossover();
 		performMutation();
 		assessPopulation(children, true);
@@ -81,10 +81,10 @@ void GeneticSolver::assess(Individual* individual) {
 		if (!isColumnUnique(*(individual->board), i)) {
 			++score;
 		}
-		if (!isRowConstraintApproved(*(individual->board), i)) {
+		if (checkColumnConstraint(*(individual->board), i)) {
 			score += size / 2;
 		}
-		if (!isColumnConstraintApproved(*(individual->board), i)) {
+		if (checkRowConstraint(*(individual->board), i)) {
 			score += size / 2;
 		}
 	}
@@ -136,6 +136,9 @@ void GeneticSolver::performCrossover() {
 				break;
 			}
 		}
+		if (parent1 == nullptr) {
+			parent1 = population[0];
+		}
 
 		for (unsigned j = 0; j < population_size; ++j) {
 			if (rand2 >= probability[j].start && rand2 < probability[j].end) {
@@ -143,6 +146,10 @@ void GeneticSolver::performCrossover() {
 				break;
 			}
 		}
+		if (parent2 == nullptr) {
+			parent2 = population[0];
+		}
+		
 
 		children[i] = createChild(parent1, parent2);
 	}

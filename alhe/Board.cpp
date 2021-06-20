@@ -19,7 +19,7 @@ void Board::copyValues(Board& _board) {
 
 	for (unsigned i = 0; i < size; ++i) {
 		for (unsigned j = 0; j < size; ++j) {
-			this->fields[i][j] = _board.getField(i, j);
+			this->fields[i][j] = _board.getField(j, i);
 		}
 	}
 }

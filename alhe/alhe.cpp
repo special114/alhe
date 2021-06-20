@@ -18,7 +18,7 @@ void readInputFile(unsigned& n, vector<vector<unsigned>>& constraints) {
 	char buffer[10];
 	file.getline(buffer, 9);
 	n = atoi(buffer);
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		vector<unsigned> vec;
 		for (int j = 0; j < n - 1; ++j) {
 			file.getline(buffer, 9, ' ');
@@ -44,18 +44,19 @@ int main( int argc, char* argv[] )
 
 	Board b(n);
   
-	GeneticSolver g(b, 10, constraints);
+	/*GeneticSolver g(b, 10, constraints);
 	if (g.solve()) {
 		cout << "solved" << endl << b;
-	}
+	}*/
 
-  Board b2(n)
+
+	cout << "\nTime for Tabu! \n";
+	Board b2(n);
 	TabuSolver s(b2, constraints);
-
 
 	s.execute();
 
-	cout << "Udalo sie! \n";
-	cout << b ;
+	cout << "We did it! \n";
+	cout << b2 ;
 	return 0;
 }

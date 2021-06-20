@@ -33,6 +33,7 @@ void TabuSolver::execute()
 
 		++loops;
 	}
+	cout << loops<<'\n';
 }
 
 void TabuSolver::calculateRowsLossFunction()
