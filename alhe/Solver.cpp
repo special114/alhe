@@ -84,6 +84,17 @@ bool Solver::isSolution(Board& board)
     return true;
 }
 
+int Solver::checkValueUniqueness(Board& board, unsigned column, unsigned value)
+{
+	int matchedValues = -1;
+	for (unsigned row = 0; row < getSize(); ++row) {
+		if (board.getField(column, row) == value)
+			++matchedValues;
+	}
+
+	return matchedValues;
+}
+
 bool Solver::isColumnUnique(Board& board, unsigned column)
 {
     bool* numbers = new bool[getSize()];
@@ -92,8 +103,10 @@ bool Solver::isColumnUnique(Board& board, unsigned column)
     }
 
     for (unsigned row = 0; row < getSize(); ++row) {
-        if (numbers[board.getField(column, row) - 1] == true)
+        if (numbers[board.getField(column, row) - 1] == true) {
+            delete[] numbers;
             return false;
+        }
         numbers[board.getField(column, row) - 1] = true;
     }
 
@@ -127,7 +140,7 @@ int Solver::checkColumnConstraint(Board& board, unsigned column)
     if (bot_constraints[column] != 0) {
         seenPyramids = 0;
         highestPyramid = 0;
-        for (unsigned row = getSize() - 1; row > 0; --row) {
+        for (int row = getSize() - 1; row >= 0; --row) {
             unsigned currentPyramid = board.getField(column, row);
 
             if (currentPyramid > highestPyramid) {
@@ -152,8 +165,10 @@ bool Solver::isRowUnique(Board& board, unsigned row)
     }
 
     for (unsigned column = 0; column < getSize(); ++column) {
-        if (numbers[board.getField(column, row) - 1] == true)
+        if (numbers[board.getField(column, row) - 1] == true) {
+            delete[] numbers;
             return false;
+        }
         numbers[board.getField(column, row) - 1] = true;
     }
 
@@ -185,7 +200,7 @@ int Solver::checkRowConstraint(Board& board, unsigned row)
     if (right_constraints[row] != 0) {
         seenPyramids = 0;
         highestPyramid = 0;
-        for (unsigned column = getSize() - 1; column > 0; --column) {
+        for (int column = getSize() - 1; column >= 0; --column) {
             unsigned currentPyramid = board.getField(column, row);
 
             if (currentPyramid > highestPyramid) {

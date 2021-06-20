@@ -43,19 +43,31 @@ int main( int argc, char* argv[] )
 	readInputFile(n, constraints);
 
 	Board b(n);
-  
-	GeneticSolver g(b, 10, constraints);
+	GeneticSolver g(b, 100, constraints);
+
+	auto start = chrono::steady_clock::now();
+
 	if (g.solve()) {
-		cout << "solved" << endl << b;
+		auto end = chrono::steady_clock::now();
+    chrono::duration<double> elapsed_seconds = end - start;
+
+		cout << "Genetic:" << endl << b;
+		cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	}
 
 	cout << "\nTime for Tabu! \n";
 	Board b2(n);
 	TabuSolver s(b2, constraints);
 
+  start = chrono::steady_clock::now();
+
 	s.execute();
 
+	auto end = chrono::steady_clock::now();
+	chrono::duration<double> elapsed_seconds = end - start;
+	
 	cout << "We did it! \n";
 	cout << b2 ;
+	cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	return 0;
 }

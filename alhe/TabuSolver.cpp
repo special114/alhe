@@ -86,7 +86,7 @@ unsigned TabuSolver::fieldLossFunction(unsigned column, unsigned row)
 
 	lossFunction += checkRowConstraint(board, row) * getSize();
 	lossFunction += checkColumnConstraint(board, column) * getSize();
-	lossFunction += checkValueUniqueness(column, board.getField(column, row));
+	lossFunction += checkValueUniqueness(board, column, board.getField(column, row));
 
 	return lossFunction;
 }
@@ -105,17 +105,6 @@ int TabuSolver::lossFunctionDiffAfterSwap(unsigned column, unsigned row, unsigne
 	int diff = currLossValue - lossValueAfterSwap;
 
 	return diff;
-}
-
-int TabuSolver::checkValueUniqueness(unsigned column, unsigned value)
-{
-	int matchedValues = -1;
-	for (unsigned row = 0; row < getSize(); ++row) {
-		if (board.getField(column, row) == value)
-			++matchedValues;
-	}
-
-	return matchedValues;
 }
 
 void TabuSolver::addToTabu(unsigned row)

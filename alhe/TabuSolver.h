@@ -22,7 +22,6 @@ private:
 	unsigned calculateRowLossFunction(unsigned row);
 	void calculateRowsLossFunction();
 	int lossFunctionDiffAfterSwap(unsigned column, unsigned row, unsigned neighbour);
-	int checkValueUniqueness(unsigned column, unsigned value);
 
 	void addToTabu(unsigned row);
 	bool checkIfInTabu(unsigned row);

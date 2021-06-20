@@ -3,10 +3,11 @@
 #include <functional>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 #include "Solver.h"
 
-const int MUTATION = 0.5;
+const double MUTATION = 0.75;
 
 class Individual {
 public:
@@ -48,6 +49,9 @@ public:
 	void performCrossover();
 	void performMutation();
 	void performSuccession();
+
+	int checkValueUniquenessInRow(Board& board, unsigned row, unsigned value);
+
 	Individual* createChild(Individual* in1, Individual* in2);
 	static bool comp(Individual* in1, Individual* in2);
 	void print();

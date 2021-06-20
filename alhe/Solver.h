@@ -25,8 +25,11 @@ public:
 	bool isSolution(Board& board);
 	bool isColumnUnique(Board& board, unsigned column);
 	bool isRowUnique(Board& board, unsigned row);
+
 	int checkColumnConstraint(Board& board, unsigned column);
 	int checkRowConstraint(Board& board, unsigned row);
+	int checkValueUniqueness(Board& board, unsigned column, unsigned value);
+
 	void copyValues(unsigned* toTable, unsigned* fromTable);
 	std::vector<unsigned> split(const std::string& s, char deliliter);
 };

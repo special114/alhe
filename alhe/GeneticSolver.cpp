@@ -21,6 +21,8 @@ GeneticSolver::~GeneticSolver() {
 	}
 	delete[] population;
 	delete[] population_scores;
+	delete[] children;
+	delete[] probability;
 }
 
 
@@ -75,17 +77,12 @@ void GeneticSolver::assess(Individual* individual) {
 	unsigned score = 0;
 
 	for (unsigned i = 0; i < size; ++i) {
-		if (!isRowUnique(*(individual->board), i)) {
-			++score;
-		}
-		if (!isColumnUnique(*(individual->board), i)) {
-			++score;
-		}
-		if (checkColumnConstraint(*(individual->board), i)) {
-			score += size / 2;
-		}
-		if (checkRowConstraint(*(individual->board), i)) {
-			score += size / 2;
+		score += checkColumnConstraint(*(individual->board), i) * size;
+		score += checkRowConstraint(*(individual->board), i) * size;
+
+		for (unsigned j = 0; j < size; ++j) {
+			score += checkValueUniqueness(*(individual->board), i, individual->board->getField(i, j));
+			score += checkValueUniquenessInRow(*(individual->board), j, individual->board->getField(i, j));
 		}
 	}
 	if (score == 0) {
@@ -94,6 +91,17 @@ void GeneticSolver::assess(Individual* individual) {
 		return;
 	}
 	individual->score = (double) score;
+}
+
+int GeneticSolver::checkValueUniquenessInRow(Board& board, unsigned row, unsigned value)
+{
+	int matchedValues = -1;
+	for (unsigned column = 0; column < getSize(); ++column) {
+		if (board.getField(column, row) == value)
+			++matchedValues;
+	}
+
+	return matchedValues;
 }
 
 void GeneticSolver::performSelection() {
@@ -150,7 +158,6 @@ void GeneticSolver::performCrossover() {
 			parent2 = population[0];
 		}
 		
-
 		children[i] = createChild(parent1, parent2);
 	}
 }
@@ -172,11 +179,14 @@ void GeneticSolver::performSuccession() {
 	if (population[0]->score > children[0]->score) {
 		delete population[0];
 		population[0] = children[0];
+	} else {
+		delete children[0];
 	}
 	for (unsigned i = 1; i < population_size; ++i) {
 		delete population[i];
 		population[i] = children[i];
 	}
+	cout << "najlepszy: " << population[0]->score << endl;
 }
 
 Individual* GeneticSolver::createChild(Individual* parent1, Individual* parent2) {
