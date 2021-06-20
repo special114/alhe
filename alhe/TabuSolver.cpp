@@ -18,6 +18,7 @@ void TabuSolver::execute()
 
 	while ( !isSolution(board) ) {
 		if (loops == LOOP_RESET) {
+			cout << "Reset!\n";
 			randomInitialization(board);
 			cout << board << "\n";
 			loops = 0;

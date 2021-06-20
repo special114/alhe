@@ -37,15 +37,26 @@ void Solver::randomInitialization(Board& _board)
 
     for (unsigned row = 0; row < getSize(); ++row) {
         for (unsigned i = 0; i < getSize(); ++i) {
-            numbers[i] = i + 1;
+            numbers[i] = 0;
         }
 
-        /*std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distrib(0, factorial(getSize()));*/
-        unsigned permutation = std::rand() % factorial(getSize()) + 1;
-        for (unsigned i = 0; i < permutation; ++i) {
-            std::next_permutation(numbers, numbers + getSize());
+        bool numberIsAlreadyInTable;
+        unsigned randomNum;
+        for (int i = 0; i < getSize(); ++i) {
+            numberIsAlreadyInTable = false;
+            randomNum = std::rand() % getSize() + 1;
+            for (unsigned j = 0; j < getSize(); ++j) {
+                if (numbers[j] == randomNum) {
+                    numberIsAlreadyInTable = true;
+                }
+            }
+
+            if (!numberIsAlreadyInTable) {
+                numbers[i] = randomNum;
+            }
+            else {
+                --i;
+            }
         }
 
         for (unsigned column = 0; column < getSize(); ++column) {

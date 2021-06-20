@@ -44,11 +44,10 @@ int main( int argc, char* argv[] )
 
 	Board b(n);
   
-	/*GeneticSolver g(b, 10, constraints);
+	GeneticSolver g(b, 10, constraints);
 	if (g.solve()) {
 		cout << "solved" << endl << b;
-	}*/
-
+	}
 
 	cout << "\nTime for Tabu! \n";
 	Board b2(n);

@@ -32,6 +32,6 @@ private:
 
 	std::vector<Row> rowParams;
 	const int TABU_LENGTH = 4;
-	const int LOOP_RESET = 10000;
+	const int LOOP_RESET = 50000;
 };
 
